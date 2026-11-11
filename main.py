@@ -72,7 +72,6 @@ texts = {
         "hadiths": "Hadisler",
         "scholars": "Alimler & Veliler",
         "said_nursi": "Bediüzzaman",
-        "download_json": "📥 JSON İndir",
         "no_result": "Aramanıza uygun kayıt bulunamadı.",
         "sleep_info": "💡 *Not:* Bu web uygulaması ücretsiz sunucularda barındırılmaktadır. Uzun süre işlem yapılmadığında uygulama uyku moduna geçebilir (ekranda 'Zzzz' simgesi çıkabilir).\n\n💤 Eğer böyle bir ekranla karşılaşırsanız, ekranda beliren mavi renkli *'Yes, get this app back up!'* butonuna tıklayın ve uygulamanın yeniden uyanması için 15-30 saniye bekleyin.",
         "footer": "Matematik ve Hikmet Külliyatı Arşivi © 2026. Her hakkı saklıdır. Ticari olarak kullanılamaz. Ayetler Diyanet İşleri Başkanlığı mealinden alınmıştır."
@@ -88,7 +87,6 @@ texts = {
         "hadiths": "Hadiths",
         "scholars": "Scholars & Saints",
         "said_nursi": "Bediuzzaman",
-        "download_json": "📥 Download JSON",
         "no_result": "No matching records found.",
         "sleep_info": "💡 *Note:* This web application is hosted on free servers. When left inactive for a long time, the app may go to sleep mode (a 'Zzzz' icon may appear on the screen).\n\n💤 If you encounter such a screen, click the blue button that says *'Yes, get this app back up!'* on the screen and wait 15-30 seconds for the app to wake up.",
         "footer": "Mathematics and Wisdom Archive © 2026. All rights reserved. Non-commercial use only. Verses are taken from Diyanet Affairs translation."
@@ -101,7 +99,7 @@ t = texts["tr"] if dil == "Türkçe" else texts["en"]
 st.sidebar.markdown("---")
 st.sidebar.info(t['sleep_info'])
 
-# --- MASTER VERİ SETİ (Tamamen İki Dilli Destekli 1-80 Liste) ---
+# --- MASTER VERİ SETİ (1-80 Liste) ---
 if 'master_data' not in st.session_state:
     st.session_state.master_data = [
         # Ayetler (1-20)
@@ -912,11 +910,12 @@ if 'master_data' not in st.session_state:
             "hikmet_en": "The engine of material development is mathematics and positive sciences."
         }
     ]
+
 # --- ARAYÜZ VE GÖRÜNTÜLEME MANTIĞI ---
 st.markdown(f"<h1 class='main-title'>{t['title']}</h1>", unsafe_allow_html=True)
 st.markdown(f"<p class='sub-title'>{t['subtitle']}</p>", unsafe_allow_html=True)
 
-# Yasal Koruma ve Sorumluluk Reddi Bildirimi (Dil Destekli)
+# Yasal Koruma ve Sorumluluk Reddi Bildirimi
 if dil == "Türkçe":
     st.warning(
         "⚖️ **Yasal Uyarı / Legal Notice:** Bu web uygulamasındaki tüm içerik yalnızca **bilgi paylaşımı** amacıyla sunulmuştur. "
@@ -975,17 +974,8 @@ if arama_metni:
         filtered_df['hikmet_en'].str.contains(arama_kucuk, case=False, na=False)
     ]
 
-col_head1, col_head2 = st.columns([3, 1])
-with col_head1:
-    st.subheader(f"📖 Arşiv / Archive ({len(filtered_df)} kayıt / records)")
-with col_head2:
-    json_data = filtered_df.to_json(orient="records", force_ascii=False)
-    st.download_button(
-        label=t['download_json'],
-        data=json_data,
-        file_name="math_wisdom_archive.json",
-        mime="application/json"
-    )
+# İndirme butonu ve sütun yapısı tamamen kaldırıldı, başlık doğrudan gösteriliyor
+st.subheader(f"📖 Arşiv / Archive ({len(filtered_df)} kayıt / records)")
 
 if len(filtered_df) == 0:
     st.info(t['no_result'])
